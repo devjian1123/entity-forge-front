@@ -19,7 +19,7 @@ const forgingEntity = async () => {
     convertedEntity.value = await convertDDLToEntity(ddlInput.value)
   } catch (error) {
     console.error('Conversion failed: ', error)
-    convertedEntity.value = 'Error converting DDL.'
+    convertedEntity.value = error.response.data.message
   } finally {
     isLoading.value = false
   }
