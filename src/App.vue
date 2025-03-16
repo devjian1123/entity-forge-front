@@ -1,5 +1,6 @@
 <script setup>
 import { convertDDLToEntity } from '@/api/entityForge'
+import MonacoEditor from '@/components/MonacoEditor.vue'
 import { ref } from 'vue'
 
 const ddlInput = ref('')
@@ -19,7 +20,7 @@ const forgingEntity = async () => {
     convertedEntity.value = await convertDDLToEntity(ddlInput.value)
   } catch (error) {
     console.error('Conversion failed: ', error)
-    convertedEntity.value = error.response.data.message
+    convertedEntity.value = error.response?.data?.message || '변환 실패'
   } finally {
     isLoading.value = false
   }
@@ -29,47 +30,21 @@ const forgingEntity = async () => {
 <template>
   <div class="container">
     <h1>Entity Forge</h1>
-    <textarea v-model="ddlInput" placeholder="Enter DDL statement here..."></textarea>
+
+    <!-- Monaco Editor (SQL 입력) -->
+    <div class="editor-container">
+      <MonacoEditor v-model="ddlInput" language="sql" />
+    </div>
+
     <button @click="forgingEntity" :disabled="isLoading">
       {{ isLoading ? 'Converting...' : 'Convert' }}
     </button>
-    <pre v-if="convertedEntity">{{ convertedEntity }}</pre>
+
+    <!-- Monaco Editor (Java 변환 결과) -->
+    <div class="editor-container">
+      <MonacoEditor v-model="convertedEntity" language="java" />
+    </div>
   </div>
 </template>
 
-<style scoped>
-.container {
-  max-width: 600px;
-  margin: 50px auto;
-  text-align: center;
-}
-
-textarea {
-  width: 100%;
-  height: 150px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-}
-
-button {
-  padding: 10px 15px;
-  background: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  margin-bottom: 15px;
-}
-
-button:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-}
-
-pre {
-  background: #f4f4f4;
-  padding: 10px;
-  text-align: left;
-  white-space: pre-wrap;
-}
-</style>
+<style scoped></style>
