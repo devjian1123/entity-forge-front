@@ -1,11 +1,19 @@
 <script setup>
 import * as monaco from 'monaco-editor'
-import { onMounted, ref, watch, onBeforeUnmount } from 'vue'
+import { onMounted, ref, watch, onBeforeUnmount, readonly } from 'vue'
 
 const props = defineProps({
   language: {
     type: String,
     default: 'sql',
+  },
+  placeholder: {
+    type: String,
+    default: 'Forge your queries here...',
+  },
+  readOnly: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -19,8 +27,11 @@ onMounted(() => {
     value: modelValue.value || '',
     language: props.language,
     theme: 'vs-dark',
-    minimap: { enabled: true },
-    automaticLayout: false,
+    minimap: { enabled: false },
+    automaticLayout: true,
+    overviewRulerBorder: false,
+    placeholder: props.placeholder,
+    readOnly: props.readOnly,
   })
 
   // Monaco Editor에서 입력할 때 v-model 값 업데이트
@@ -41,11 +52,16 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="editorContainer" class="editor-container" style="height: 400px; width: 100%"></div>
+  <div ref="editorContainer" class="monaco-editor"></div>
 </template>
 
 <style scoped>
-.editor-container div {
-  font-family: 'Fira Code';
+.monaco-editor div {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.monaco-editor {
+  width: 100%;
+  height: 100%;
 }
 </style>
