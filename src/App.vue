@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue'
-import MonacoEditor from '@/components/MonacoEditor.vue'
 import { convertDDLToEntity } from '@/api/entityForge'
+import MonacoEditor from '@/components/MonacoEditor.vue'
+import { ref } from 'vue'
 
 const titleText = ref('ENTITY FORGE'.split(''))
 const ddlInput = ref('')
@@ -13,62 +13,91 @@ const handleForge = async () => {
   entityCode.value = await convertDDLToEntity(ddlInput.value)
 }
 </script>
-
+;.
 <template>
-  <div class="container">
-    <!-- Forge Title -->
-    <div class="forge-title-container">
-      <h1 class="forge-title">
-        <span
-          v-for="(char, index) in titleText"
-          :key="index"
-          class="char"
-          :class="{ hot: index >= 7 }"
-          :style="{ animationDelay: `${index * 0.15}s` }"
-        >
-          {{ char }}
-          <span class="spark" v-if="Math.random() > 0.8"></span>
-        </span>
-      </h1>
-    </div>
+  <div class="main-layout">
+    <!-- 왼쪽 패널 -->
+    <aside class="sidebar">
+      <h2 class="sidebar-title">Menu</h2>
+      <ul class="sidebar-menu">
+        <li>Convert DDL</li>
+        <li>Settings</li>
+        <li>Docs</li>
+      </ul>
+    </aside>
 
-    <!-- SQL Editor -->
-    <div class="editor-container">
-      <MonacoEditor v-model="ddlInput" language="sql" />
-    </div>
+    <main class="main-container">
+      <!-- Forge Title -->
+      <header class="header-container">
+        <div class="forge-title-container">
+          <h1 class="forge-title">J Dot's Entity Forge</h1>
+        </div>
+      </header>
 
-    <!-- Convert Button -->
-    <button class="convert-button" @click.stop="handleForge">Forge It!</button>
+      <!-- SQL Editor -->
+      <div class="main-contents">
+        <div class="editor-container">
+          <MonacoEditor v-model="ddlInput" language="sql" />
+        </div>
 
-    <!-- Java Code Editor -->
-    <div class="editor-container">
-      <MonacoEditor v-model="entityCode" language="java" :read-only="true" />
-    </div>
+        <!-- Convert Button -->
+        <button class="convert-button" @click.stop="handleForge">Forge It!</button>
+
+        <!-- Java Code Editor -->
+        <div class="editor-container">
+          <MonacoEditor v-model="entityCode" language="java" :read-only="true" />
+        </div>
+      </div>
+    </main>
   </div>
 </template>
 
 <style scoped>
-.container {
+.main-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 16rem;
+  height: 100%;
+  background-color: #131313;
+  color: white;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.main-container {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.main-contents {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.header-container {
+  display: sticky;
+  top: 0;
   align-items: center;
-  margin: auto;
+  height: 4rem;
+  border-bottom: 1px solid #ccc;
 }
 
 .forge-title-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 8rem;
-  margin-bottom: 2rem;
+  height: 100%;
+  padding: 0.7rem 1rem;
 }
 
 .forge-title {
-  display: flex;
-  align-items: center;
-  font-family: 'Rowdies', sans-serif;
-  font-size: 3rem;
-  letter-spacing: 0.8rem; /* 타이틀 간격을 좀 더 좁게 */
+  font-size: 1.2rem;
+  color: #fff;
 }
 
 .char {
@@ -85,20 +114,8 @@ const handleForge = async () => {
 }
 
 .editor-container {
-  padding: 5px;
   width: 100%;
-  height: calc(100vh - 8rem - 20rem); /* 더 여유롭게 설정 */
-  border: 2px solid #4a4a4a; /* 차가운 철 테두리 */
-  border-radius: 8px; /* 둥근 모서리 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
-  transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.editor-container:hover {
-  border-color: #ff8c00; /* 마우스를 올렸을 때 주황색으로 변경 */
-  box-shadow: 0 6px 12px rgba(255, 140, 0, 0.2); /* 강조된 그림자 효과 */
+  height: calc(100vh - 8rem - 20rem);
 }
 
 .convert-button {

@@ -25,6 +25,8 @@ let editorInstance = null
 onMounted(() => {
   editorInstance = monaco.editor.create(editorContainer.value, {
     value: modelValue.value || '',
+    fontSize: 15,
+    fontFamily: 'Jetbrains Mono',
     language: props.language,
     theme: 'vs-dark',
     minimap: { enabled: false },
