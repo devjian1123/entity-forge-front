@@ -34,20 +34,31 @@ const handleForge = async () => {
         </div>
       </header>
 
-      <!-- SQL Editor -->
-      <div class="main-contents">
-        <div class="editor-container">
-          <MonacoEditor v-model="ddlInput" language="sql" />
+      <section class="main-contents">
+        <!-- SQL Editor -->
+        <div class="editor-container sql-editor">
+          <MonacoEditor
+            v-model="ddlInput"
+            language="sql"
+            placeholder="Forge your queries here..."
+          />
         </div>
 
         <!-- Convert Button -->
-        <button class="convert-button" @click.stop="handleForge">Forge It!</button>
+        <div class="between-editor">
+          <button class="convert-button" @click.stop="handleForge">Forge It!</button>
+        </div>
 
         <!-- Java Code Editor -->
-        <div class="editor-container">
-          <MonacoEditor v-model="entityCode" language="java" :read-only="true" />
+        <div class="editor-container java-editor">
+          <MonacoEditor
+            v-model="entityCode"
+            language="java"
+            :read-only="true"
+            placeholder="Generated Entity Code will be Here..."
+          />
         </div>
-      </div>
+      </section>
     </main>
   </div>
 </template>
@@ -76,8 +87,18 @@ const handleForge = async () => {
 }
 
 .main-contents {
+  display: flex;
   height: 100%;
   overflow-y: auto;
+  gap: 1rem;
+}
+
+.editor-container.sql-editor,
+.editor-container.java-editor {
+  flex: 6;
+}
+.between-editor {
+  flex: 3;
 }
 
 .header-container {
@@ -114,11 +135,12 @@ const handleForge = async () => {
 }
 
 .editor-container {
-  width: 100%;
-  height: calc(100vh - 8rem - 20rem);
+  height: 100%;
 }
 
 .convert-button {
+  display: flex;
+  justify-self: center;
   padding: 7px 30px;
   font-size: 1.2rem;
   background-color: #ff8c00; /* 주황색 배경 */
