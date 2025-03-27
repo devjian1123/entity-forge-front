@@ -34,6 +34,7 @@ onMounted(() => {
     overviewRulerBorder: false,
     placeholder: props.placeholder,
     readOnly: props.readOnly,
+    wordWrap: 'on',
   })
 
   // Monaco Editor에서 입력할 때 v-model 값 업데이트

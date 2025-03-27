@@ -3,7 +3,8 @@ import { convertDDLToEntity } from '@/api/entityForge'
 import MonacoEditor from '@/components/MonacoEditor.vue'
 import { ref } from 'vue'
 
-const titleText = ref('ENTITY FORGE'.split(''))
+const activeEditor = ref(null)
+
 const ddlInput = ref('')
 const entityCode = ref('')
 
@@ -13,7 +14,6 @@ const handleForge = async () => {
   entityCode.value = await convertDDLToEntity(ddlInput.value)
 }
 </script>
-;.
 <template>
   <div class="main-layout">
     <!-- 왼쪽 패널 -->
@@ -36,12 +36,19 @@ const handleForge = async () => {
 
       <section class="main-contents">
         <!-- SQL Editor -->
-        <div class="editor-container sql-editor">
-          <MonacoEditor
-            v-model="ddlInput"
-            language="sql"
-            placeholder="Forge your queries here..."
-          />
+        <div class="editor-section">
+          <div class="editor-toolbar">
+            <span class="editor-title" :class="{ active: activeEditor === 'sql' }">SQL</span>
+            <button class="copy-button cursor-pointer" @click.stop="copyToClipboard">📋</button>
+          </div>
+
+          <div class="editor-container sql-editor" @click="activeEditor = 'sql'">
+            <MonacoEditor
+              v-model="ddlInput"
+              language="sql"
+              placeholder="Forge your queries here..."
+            />
+          </div>
         </div>
 
         <!-- Convert Button -->
@@ -50,13 +57,19 @@ const handleForge = async () => {
         </div>
 
         <!-- Java Code Editor -->
-        <div class="editor-container java-editor">
-          <MonacoEditor
-            v-model="entityCode"
-            language="java"
-            :read-only="true"
-            placeholder="Generated Entity Code will be Here..."
-          />
+        <div class="editor-section">
+          <div class="editor-toolbar">
+            <span class="editor-title" :class="{ active: activeEditor === 'java' }">JAVA</span>
+            <button class="copy-button cursor-pointer" @click.stop="copyToClipboard">📋</button>
+          </div>
+          <div class="editor-container java-editor" @click="activeEditor = 'java'">
+            <MonacoEditor
+              v-model="entityCode"
+              language="java"
+              :read-only="true"
+              placeholder="Generated Entity Code will be Here..."
+            />
+          </div>
         </div>
       </section>
     </main>
@@ -93,12 +106,28 @@ const handleForge = async () => {
   gap: 1rem;
 }
 
-.editor-container.sql-editor,
-.editor-container.java-editor {
+.editor-section {
   flex: 6;
 }
 .between-editor {
   flex: 3;
+}
+
+.editor-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  color: #fff;
+}
+
+.editor-toolbar .editor-title {
+  font-family: 'Jetbrains Mono';
+  font-weight: bold;
+}
+
+.editor-toolbar .editor-title.active {
+  border-bottom: 1px solid #ff8c00;
 }
 
 .header-container {
