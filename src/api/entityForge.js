@@ -1,10 +1,12 @@
+import { removeBackticks } from '@/utils/removeBackticks'
 import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export const convertDDLToEntity = async (ddl) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/convert-ddl`, { ddl })
+    const ddlRemovedBackticks = removeBackticks(ddl)
+    const response = await axios.post(`${API_BASE_URL}/convert-ddl`, { ddl: ddlRemovedBackticks })
     console.log('res of convert DDL: ', response)
     return response.data.entityCode
   } catch (error) {

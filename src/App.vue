@@ -104,6 +104,7 @@ const handleForge = async () => {
   height: 100%;
   overflow-y: auto;
   gap: 1rem;
+  padding: 1rem;
 }
 
 .editor-section {
@@ -135,7 +136,7 @@ const handleForge = async () => {
   position: absolute;
   bottom: -0.2rem;
   left: 0;
-  background-color: #ff8c00;
+  background-color: #ffb310;
   border-radius: 0.5rem;
   height: 0.1rem;
   width: 0%;
@@ -151,7 +152,7 @@ const handleForge = async () => {
   top: 0;
   align-items: center;
   height: 4rem;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #3a3a3a;
 }
 
 .forge-title-container {
@@ -175,54 +176,24 @@ const handleForge = async () => {
   justify-self: center;
   padding: 7px 30px;
   font-size: 1.2rem;
-  background-color: #ff8c00; /* 주황색 배경 */
+  background-color: #ff8c00;
   font-family: 'JetBrains Mono', monospace;
   color: #fff;
-  border: 2px solid #ff8c00; /* 주황색 테두리 */
+  border: 2px solid #ff8c00;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 2rem;
-  box-shadow: 0 4px 10px rgba(255, 140, 0, 0.3); /* 부드러운 그림자 */
+  box-shadow: 0 4px 10px rgba(255, 140, 0, 0.3);
 }
 
 .convert-button:hover {
-  background-color: #ff6200; /* 마우스를 올렸을 때 색상 변환 */
+  background-color: #ff6200;
   border-color: #ff6200;
-  box-shadow: 0 6px 15px rgba(255, 98, 0, 0.5); /* 강조된 그림자 */
+  box-shadow: 0 6px 15px rgba(255, 98, 0, 0.5);
 }
 
 .convert-button:active {
-  transform: scale(0.98); /* 클릭 시 약간 작아지는 효과 */
-}
-
-@keyframes forgeGlow {
-  0% {
-    color: #4a4a4a; /* 차가운 철 */
-    text-shadow: 0 0 2px #000;
-    transform: scale(1);
-  }
-  50% {
-    color: #ff8c00; /* 조금 더 부드러운 주황색 */
-    text-shadow: 0 0 8px #ff8c00;
-    transform: scale(1.05) skewX(-1deg);
-  }
-  100% {
-    color: #4a4a4a; /* 다시 차가운 철 */
-    text-shadow: 0 0 2px #000;
-    transform: scale(1);
-  }
-}
-
-@keyframes melt {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(1px) scale(1.02);
-  }
-  100% {
-    transform: translateY(2px) scale(1);
-  }
+  transform: scale(0.98);
 }
 </style>
