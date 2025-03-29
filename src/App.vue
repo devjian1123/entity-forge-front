@@ -107,6 +107,9 @@ const handleForge = async () => {
 }
 
 .editor-section {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
   flex: 6;
 }
 .between-editor {
@@ -122,12 +125,25 @@ const handleForge = async () => {
 }
 
 .editor-toolbar .editor-title {
+  position: relative;
   font-family: 'Jetbrains Mono';
   font-weight: bold;
 }
 
-.editor-toolbar .editor-title.active {
-  border-bottom: 1px solid #ff8c00;
+.editor-toolbar .editor-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.2rem;
+  left: 0;
+  background-color: #ff8c00;
+  border-radius: 0.5rem;
+  height: 0.1rem;
+  width: 0%;
+  transition: width 0.1s ease-in-out;
+}
+
+.editor-toolbar .editor-title.active::after {
+  width: 100%;
 }
 
 .header-container {
@@ -148,19 +164,6 @@ const handleForge = async () => {
 .forge-title {
   font-size: 1.2rem;
   color: #fff;
-}
-
-.char {
-  display: inline-block;
-  animation: forgeGlow 3s infinite alternate ease-in-out;
-  position: relative;
-}
-
-/* FORGE 부분만 더 부드럽게 변화 */
-.char.hot {
-  animation:
-    forgeGlow 3s infinite alternate ease-in-out,
-    melt 2s infinite alternate ease-in-out;
 }
 
 .editor-container {
