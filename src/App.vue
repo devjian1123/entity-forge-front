@@ -1,7 +1,10 @@
 <script setup>
 import { convertDDLToEntity } from '@/api/entityForge'
+import iconWindow from '@/assets/icons/window.svg'
 import MonacoEditor from '@/components/MonacoEditor.vue'
 import { ref } from 'vue'
+
+const isSideBarOpen = ref(false)
 
 const activeEditor = ref(null)
 
@@ -17,7 +20,16 @@ const handleForge = async () => {
 <template>
   <div class="main-layout">
     <!-- 왼쪽 패널 -->
-    <aside class="sidebar">
+    <aside class="sidebar" :class="{ open: isSideBarOpen }">
+      <div class="button-container">
+        <button
+          v-show="isSideBarOpen"
+          class="close-sidebar-button cursor-pointer"
+          @click.stop="isSideBarOpen = false"
+        >
+          <img :src="iconWindow" alt="open sidebar" />
+        </button>
+      </div>
       <h2 class="sidebar-title">Menu</h2>
       <ul class="sidebar-menu">
         <li>Convert DDL</li>
@@ -30,6 +42,13 @@ const handleForge = async () => {
       <!-- Forge Title -->
       <header class="header-container">
         <div class="forge-title-container">
+          <button
+            v-show="!isSideBarOpen"
+            class="open-sidebar-button cursor-pointer"
+            @click.stop="isSideBarOpen = true"
+          >
+            <img :src="iconWindow" alt="open sidebar" />
+          </button>
           <h1 class="forge-title">J Dot's Entity Forge</h1>
         </div>
       </header>
@@ -39,7 +58,9 @@ const handleForge = async () => {
         <div class="editor-section">
           <div class="editor-toolbar">
             <span class="editor-title" :class="{ active: activeEditor === 'sql' }">SQL</span>
-            <button class="copy-button cursor-pointer" @click.stop="copyToClipboard">📋</button>
+            <button class="copy-button cursor-pointer" @click.stop="copyToClipboard">
+              <img :src="iconCopy" alt="" />
+            </button>
           </div>
 
           <div class="editor-container sql-editor" @click="activeEditor = 'sql'">
@@ -84,12 +105,30 @@ const handleForge = async () => {
 }
 
 .sidebar {
-  width: 16rem;
+  display: none;
+  flex-shrink: 0;
+  width: 17rem;
   height: 100%;
   background-color: #131313;
   color: white;
-  padding: 1rem;
   overflow-y: auto;
+  padding-left: 1rem;
+}
+
+.sidebar.open {
+  display: block;
+}
+
+.sidebar .button-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 4rem;
+}
+
+.sidebar .button-container .close-sidebar-button {
+  aspect-ratio: 1/1;
+  height: 70%;
 }
 
 .main-container {
@@ -123,12 +162,14 @@ const handleForge = async () => {
   align-items: center;
   padding: 0.5rem 1rem;
   color: #fff;
+  height: 3rem;
 }
 
 .editor-toolbar .editor-title {
   position: relative;
   font-family: 'Jetbrains Mono';
   font-weight: bold;
+  height:;
 }
 
 .editor-toolbar .editor-title::after {
@@ -153,13 +194,21 @@ const handleForge = async () => {
   align-items: center;
   height: 4rem;
   border-bottom: 1px solid #3a3a3a;
+  padding-left: 0.5rem;
 }
 
 .forge-title-container {
   display: flex;
   align-items: center;
+  gap: 1rem;
   height: 100%;
-  padding: 0.7rem 1rem;
+  padding-left: 0.5rem;
+}
+
+.open-sidebar-button {
+  aspect-ratio: 1/1;
+  height: 70%;
+  padding: 0.5rem;
 }
 
 .forge-title {
