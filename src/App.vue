@@ -20,6 +20,8 @@ const handleForge = async () => {
   isLoading.value = true
 
   entityCode.value = await convertDDLToEntity(ddlInput.value)
+
+  isLoading.value = false
 }
 </script>
 <template>
