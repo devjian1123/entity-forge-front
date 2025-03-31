@@ -1,6 +1,6 @@
 <script setup>
 import { convertDDLToEntity } from '@/api/entityForge'
-import iconWindow from '@/assets/icons/window.svg'
+import IconHamburger from '@/assets/icons/hamburger.svg?component'
 import MonacoEditor from '@/components/MonacoEditor.vue'
 import { ref } from 'vue'
 
@@ -11,33 +11,37 @@ const activeEditor = ref(null)
 const ddlInput = ref('')
 const entityCode = ref('')
 
+const isLoading = ref(false)
+
+// Java Entity 변환
 const handleForge = async () => {
   console.log('forge!')
+
+  isLoading.value = true
 
   entityCode.value = await convertDDLToEntity(ddlInput.value)
 }
 </script>
 <template>
-  <div class="main-layout">
-    <!-- 왼쪽 패널 -->
-    <aside class="sidebar" :class="{ open: isSideBarOpen }">
-      <div class="button-container">
-        <button
-          v-show="isSideBarOpen"
-          class="close-sidebar-button cursor-pointer"
-          @click.stop="isSideBarOpen = false"
-        >
-          <img :src="iconWindow" alt="open sidebar" />
-        </button>
-      </div>
-      <h2 class="sidebar-title">Menu</h2>
-      <ul class="sidebar-menu">
-        <li>Convert DDL</li>
-        <li>Settings</li>
-        <li>Docs</li>
-      </ul>
-    </aside>
+  <!-- 왼쪽 패널 -->
+  <aside class="sidebar" :class="{ open: isSideBarOpen }">
+    <header class="sidebar-header">
+      <button
+        v-show="isSideBarOpen"
+        class="close-sidebar-button cursor-pointer"
+        @click.stop="isSideBarOpen = false"
+      >
+        <IconHamburger class="icon-hamburger" />
+      </button>
+      <h1 class="forge-title">Entity Forge</h1>
+    </header>
+  </aside>
 
+  <!-- 사이드바 Dimmed -->
+  <div v-show="isSideBarOpen" class="sidebar-overlay" @click.stop="isSideBarOpen = false"></div>
+
+  <!-- main layout -->
+  <div class="main-layout">
     <main class="main-container">
       <!-- Forge Title -->
       <header class="header-container">
@@ -47,9 +51,9 @@ const handleForge = async () => {
             class="open-sidebar-button cursor-pointer"
             @click.stop="isSideBarOpen = true"
           >
-            <img :src="iconWindow" alt="open sidebar" />
+            <IconHamburger class="icon-hamburger" />
           </button>
-          <h1 class="forge-title">J Dot's Entity Forge</h1>
+          <h1 class="forge-title">Entity Forge</h1>
         </div>
       </header>
 
@@ -58,9 +62,6 @@ const handleForge = async () => {
         <div class="editor-section">
           <div class="editor-toolbar">
             <span class="editor-title" :class="{ active: activeEditor === 'sql' }">SQL</span>
-            <button class="copy-button cursor-pointer" @click.stop="copyToClipboard">
-              <img :src="iconCopy" alt="" />
-            </button>
           </div>
 
           <div class="editor-container sql-editor" @click="activeEditor = 'sql'">
@@ -74,14 +75,20 @@ const handleForge = async () => {
 
         <!-- Convert Button -->
         <div class="between-editor">
-          <button class="convert-button" @click.stop="handleForge">Forge It!</button>
+          <button
+            class="convert-button cursor-pointer"
+            @click.stop="handleForge"
+            :disabled="isLoading"
+          >
+            <span v-if="!isLoading">FORGE IT !</span>
+            <span v-else class="spinner"></span>
+          </button>
         </div>
 
         <!-- Java Code Editor -->
         <div class="editor-section">
           <div class="editor-toolbar">
             <span class="editor-title" :class="{ active: activeEditor === 'java' }">JAVA</span>
-            <button class="copy-button cursor-pointer" @click.stop="copyToClipboard">📋</button>
           </div>
           <div class="editor-container java-editor" @click="activeEditor = 'java'">
             <MonacoEditor
@@ -98,6 +105,23 @@ const handleForge = async () => {
 </template>
 
 <style scoped>
+.icon-hamburger {
+  width: 100%;
+  height: 100%;
+  fill: #fff;
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  vertical-align: middle;
+}
+
 .main-layout {
   display: flex;
   height: 100vh;
@@ -105,18 +129,40 @@ const handleForge = async () => {
 }
 
 .sidebar {
-  display: none;
-  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 17rem;
   height: 100%;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.4);
   background-color: #131313;
   color: white;
   overflow-y: auto;
   padding-left: 1rem;
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
 }
 
 .sidebar.open {
-  display: block;
+  transform: translateX(0);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 900;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  height: 4rem;
+  gap: 1rem;
 }
 
 .sidebar .button-container {
@@ -124,11 +170,6 @@ const handleForge = async () => {
   align-items: center;
   width: 100%;
   height: 4rem;
-}
-
-.sidebar .button-container .close-sidebar-button {
-  aspect-ratio: 1/1;
-  height: 70%;
 }
 
 .main-container {
@@ -147,13 +188,16 @@ const handleForge = async () => {
 }
 
 .editor-section {
+  flex: 1 1 0;
   display: flex;
   height: 100%;
   flex-direction: column;
-  flex: 6;
+  min-width: 0;
 }
 .between-editor {
-  flex: 3;
+  flex: 0 0 20%;
+  display: flex;
+  justify-content: center;
 }
 
 .editor-toolbar {
@@ -205,15 +249,18 @@ const handleForge = async () => {
   padding-left: 0.5rem;
 }
 
-.open-sidebar-button {
-  aspect-ratio: 1/1;
-  height: 70%;
-  padding: 0.5rem;
+.open-sidebar-button,
+.close-sidebar-button {
+  width: 24px;
+  height: 24px;
 }
 
 .forge-title {
-  font-size: 1.2rem;
-  color: #fff;
+  font-family: 'Unica One', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.7rem;
+  color: #b4b4b4;
 }
 
 .editor-container {
@@ -222,15 +269,21 @@ const handleForge = async () => {
 
 .convert-button {
   display: flex;
+  justify-content: center;
   justify-self: center;
-  padding: 7px 30px;
-  font-size: 1.2rem;
+  align-items: center;
+  width: 12rem;
+  height: 4rem;
   background-color: #ff8c00;
-  font-family: 'JetBrains Mono', monospace;
+  padding: 1rem 1rem;
+  font-family: 'Unica One', sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  font-style: normal;
   color: #fff;
+  text-align: center;
   border: 2px solid #ff8c00;
   border-radius: 5px;
-  cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 2rem;
   box-shadow: 0 4px 10px rgba(255, 140, 0, 0.3);
@@ -244,5 +297,14 @@ const handleForge = async () => {
 
 .convert-button:active {
   transform: scale(0.98);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

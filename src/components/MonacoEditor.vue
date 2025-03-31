@@ -1,6 +1,6 @@
 <script setup>
 import * as monaco from 'monaco-editor'
-import { onMounted, ref, watch, onBeforeUnmount, readonly } from 'vue'
+import { onMounted, ref, watch, onBeforeUnmount } from 'vue'
 
 const props = defineProps({
   language: {
