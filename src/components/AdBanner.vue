@@ -19,7 +19,6 @@ onMounted(() => {
     data-ad-slot="4751403842"
     data-ad-format="auto"
     :data-full-width-responsive="true"
-    data-adtest="on"
   ></ins>
 </template>
 
