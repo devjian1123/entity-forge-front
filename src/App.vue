@@ -3,7 +3,7 @@ import { convertDDLToEntity } from '@/api/entityForge'
 import IconGithub from '@/assets/icons/github-mark-white.png'
 import IconHamburger from '@/assets/icons/hamburger.svg?component'
 import MonacoEditor from '@/components/MonacoEditor.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const isSideBarOpen = ref(false)
 
@@ -86,6 +86,15 @@ const handleForge = async () => {
             <span v-if="!isLoading">FORGE IT !</span>
             <span v-else class="spinner"></span>
           </button>
+          <!-- main-ad-banner -->
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-8169269414088189"
+            data-ad-slot="4751403842"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
         </div>
 
         <!-- Java Code Editor -->
