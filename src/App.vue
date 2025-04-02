@@ -1,5 +1,6 @@
 <script setup>
 import { convertDDLToEntity } from '@/api/entityForge'
+import IconGithub from '@/assets/icons/github-mark-white.png'
 import IconHamburger from '@/assets/icons/hamburger.svg?component'
 import MonacoEditor from '@/components/MonacoEditor.vue'
 import { ref } from 'vue'
@@ -102,11 +103,46 @@ const handleForge = async () => {
           </div>
         </div>
       </section>
+      <footer class="footer-container">
+        <div class="footer-icon-list">
+          <a href="https://github.com/devjian1123" target="_blank" class="footer-icon-btn">
+            <img :src="IconGithub" class="icon-github" alt="github" />
+          </a>
+        </div>
+      </footer>
     </main>
   </div>
 </template>
 
 <style scoped>
+.footer-container {
+  display: flex;
+  justify-content: center;
+  height: 3rem;
+  background-color: #1a1a1a;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.footer-icon-list {
+  display: flex;
+  justify-content: center;
+  width: 60%;
+  height: 100%;
+}
+
+.footer-icon-btn {
+  height: 100%;
+  padding: 0.6rem;
+  cursor: pointer;
+}
+
+.icon-github {
+  width: 100%;
+  height: 100%;
+}
+
 .icon-hamburger {
   width: 100%;
   height: 100%;
@@ -178,7 +214,6 @@ const handleForge = async () => {
   display: flex;
   flex-direction: column;
   flex: 1;
-  height: 100%;
 }
 
 .main-contents {
@@ -225,7 +260,7 @@ const handleForge = async () => {
   left: 0;
   background-color: #ffb310;
   border-radius: 0.5rem;
-  height: 0.1rem;
+  height: 0.15rem;
   width: 0%;
   transition: width 0.1s ease-in-out;
 }
